@@ -7,7 +7,7 @@ vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 vim.keymap.set('n', "<Esc>", "<cmd>nohls<CR>")
 
 
-vim.keymap.set('n', "<leader>w", "<cmd>w<CR>")
+vim.keymap.set('n', "<leader>w", "mzgg=G`z<cmd>w<CR>")
 
 
 vim.keymap.set('i', "jj", "<Esc>")
@@ -45,4 +45,14 @@ vim.keymap.set("n", "<leader>Y", "\"+Y")
 vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true } )
 
-vim.keymap.set("n", "<leader>r", "<cmd>!./%<CR>", { silent = true } )
+vim.keymap.set("n", "<leader>R", "<cmd>!./%<CR>", { silent = true } )
+
+--vim.keymap.set("v", "<leader>S", '"1y :exe "%s/" . @1 . "/"')
+
+
+vim.keymap.set("i", "<leader>(", "()<Left>")
+vim.keymap.set("i", "<leader>{", "{}<Left>")
+vim.keymap.set("i", "<leader>[", "[]<Left>")
+vim.keymap.set("i", '<leader>"', '""<Left>')
+vim.keymap.set("i", "<leader>'", "''<Left>")
+vim.keymap.set("i", "<leader><", "<><Left>")

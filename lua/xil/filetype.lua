@@ -1,1 +1,1 @@
-vim.filetype.add({ extension = {frag = "frag" }})
+vim.filetype.add({ extension = {frag = "glsl", h = "c"}})

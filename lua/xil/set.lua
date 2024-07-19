@@ -1,6 +1,7 @@
 vim.opt.relativenumber = true
 vim.opt.number = true
 
+vim.opt.showmode = false
 
 vim.opt.breakindent = true
 
@@ -53,3 +54,9 @@ vim.opt.incsearch = true
 
 
 vim.opt.termguicolors = true
+
+
+vim.diagnostic.config({
+    virtual_text = false,
+})
+
