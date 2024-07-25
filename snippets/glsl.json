@@ -150,7 +150,6 @@
         "description": "Draws a circunference section"
     },
 
-
     "Rectangle": {
         "prefix": "Rectangle",
         "body": [
@@ -367,7 +366,6 @@
             "mat3 yuv2rgb = mat3(1.0, 0.0, 1.13983,",
             "\t\t\t\t\t1.0, -0.39465, -0.5806,",
             "\t\t\t\t\t1.0, 2.03211, 0.0);"
-
         ],
         "description": "converts a from YUV to RGB color space"
     },
@@ -378,9 +376,8 @@
             "mat3 rgb2yub = mat3(0.2126, 0.7152, 0.0722,",
             "\t\t\t\t\t-0.09991, -0.33609, 0.43600,",
             "\t\t\t\t\t0.615, -0.5586, -0.05639);"
-
         ],
         "description": "converts a from RGB to YUV color space"
-    },
+    }
 
 }
