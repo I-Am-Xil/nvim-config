@@ -49,14 +49,56 @@
         "description": "PI setup"
     },
 
-    "Random2D": {
-        "prefix": "Random2D",
+    "Rand": {
+        "prefix": "Rand",
         "body": [
-            "float Random2D(vec2 coord){",
-            "\treturn fract(sin(dot(coord.xy, vec2(12.9898, 78.233))) * 43758.5453);",
+            "float Rand(float seed){",
+            "\treturn fract(sin(seed)*100000.);",
             "}"
         ],
-        "description": "random 2d function"
+        "description": "Random function"
+    },
+
+    "Rand2": {
+        "prefix": "Rand2",
+        "body": [
+            "float Rand2(float seed){",
+            "\tfloat p = fract(sin(seed)*100000.);",
+            "\treturn p*p;",
+            "}"
+        ],
+        "description": "Random function"
+    },
+
+    "Rand3": {
+        "prefix": "Rand3",
+        "body": [
+            "float Rand3(float seed){",
+            "\treturn sqrt(fract(sin(seed)*100000.));",
+            "}"
+        ],
+        "description": "Random function"
+    },
+
+    "Rand4": {
+        "prefix": "Rand4",
+        "body": [
+            "float Rand4(float seed){",
+            "\tfloat p = fract(sin(seed)*100000.);",
+            "\treturn p*p*p*p*p;",
+            "}"
+        ],
+        "description": "Random function"
+    },
+
+    "Rand2D": {
+        "prefix": "Rand2D",
+        "body": [
+            "float Rand2D(vec2 uv){",
+            "\treturn fract(sin(dot(uv.xy, vec2(12.9898, 78.233))) * 43758.5453);",
+            "}"
+        ],
+        "description": "Random 2d function"
     },
 
     "Noise1D": {
@@ -84,8 +126,7 @@
             "uniform vec2 u_mouse;",
             "",
             "void main(){",
-            "\tvec2 uv = (2.0 * gl_FragCoord.xy - u_resolution) / u_resolution.y;
-            ",
+            "\tvec2 uv = (2.0 * gl_FragCoord.xy - u_resolution) / u_resolution.y;",
             "\tvec3 color = vec3(0.0);",
             "",
             "\tfragColor = vec4(color, 1.0);",
@@ -97,8 +138,7 @@
     "Circle": {
         "prefix": "Circle",
         "body": [
-            "float Circle(vec2 uv, float scale, float blur, vec2 offset){",
-            "\tuv += offset;",
+            "float Circle(vec2 uv, float scale, float blur){",
             "\treturn smoothstep(scale + blur, scale - blur, length(uv));",
             "}"
         ],
@@ -108,9 +148,9 @@
     "Circunference": {
         "prefix": "Circunference",
         "body": [
-            "float Circunference(vec2 uv, vec2 offset, float scale, float thickness, float blur){",
-            "\tfloat circunference = Circle(uv, scale, blur, vec2(offset));",
-            "\tcircunference -= Circle(uv, scale - thickness, blur, vec2(offset));",
+            "float Circunference(vec2 uv, float scale, float thickness, float blur){",
+            "\tfloat circunference = Circle(uv, scale, blur);",
+            "\tcircunference -= Circle(uv, scale - thickness, blur);",
             "\treturn circunference;",
             "}"
         ],
@@ -120,15 +160,13 @@
     "Arc": {
         "prefix": "Arc",
         "body": [
-            "float Arc(vec2 uv, vec2 scale, vec2 offset, float thickness, vec4 blur, float rotation_angle){",
-            "\tuv *= Rotate2D(rotation_angle);",
-            "",
+            "float Arc(vec2 uv, vec2 scale, float thickness, vec4 blur){",
             "\tfloat r = length(uv);",
             "\tfloat theta = atan(uv.y, uv.x);",
             "\tuv = vec2(r, theta);",
 
-            "\tfloat arc = Rectangle(uv, scale + vec2(thickness, 0.), blur, offset);",
-            "\tarc -= Rectangle(uv, scale, blur, offset);",
+            "\tfloat arc = Rectangle(uv, scale + vec2(thickness, 0.), blur);",
+            "\tarc -= Rectangle(uv, scale, blur);",
             "",
             "\treturn arc;",
             "}"
@@ -136,23 +174,11 @@
         "description": "Draws a circunference section"
     },
 
-    "Rectangle": {
-        "prefix": "Rectangle",
-        "body": [
-            "float Rectangle(vec2 uv, vec2 scale, vec4 blur, vec2 offset){",
-            "\tfloat xBand = Band(scale.x, blur.xz, offset.x, uv.x);",
-            "\tfloat yBand = Band(scale.y, blur.yw, offset.y, uv.y);",
-            "\treturn xBand * yBand;",
-            "}"
-        ],
-        "description": "Draws a rectangle shape"
-    },
-
     "Band": {
         "prefix": "Band",
         "body": [
-            "float Band(float scale, vec2 blur, float offset, float axis){",
-            "\taxis +=  offset + 0.5;",
+            "float Band(float scale, vec2 blur, float axis){",
+            "\taxis += 0.5;",
             "\tscale += 0.5;",
             "\tfloat s1 = smoothstep(scale + blur.x, scale - blur.x, axis);",
             "\tfloat s2 = smoothstep(scale + blur.y, scale - blur.y, 1.-axis);",
@@ -162,12 +188,36 @@
         "description": "Draws a band around the uv axis"
     },
 
+    "Rectangle": {
+        "prefix": "Rectangle",
+        "body": [
+            "float Rectangle(vec2 uv, vec2 scale, vec4 blur){",
+            "\tfloat xBand = Band(scale.x, blur.xz, uv.x);",
+            "\tfloat yBand = Band(scale.y, blur.yw, uv.y);",
+            "\treturn xBand * yBand;",
+            "}"
+        ],
+        "description": "Draws a rectangle shape"
+    },
+
+    "RectanglePerimeter": {
+        "prefix": "RectanglePerimeter",
+        "body": [
+            "float RectanglePerimeter(vec2 uv, vec2 scale, float thickness, vec4 blur){",
+            "\tfloat rect = Rectangle(uv, scale, blur);",
+            "\trect -= Rectangle(uv, scale - vec2(thickness), blur);",
+            "\treturn rect;",
+            "}"
+        ],
+        "description": "Draws a hollow rectangle shape"
+    },
+
     "Cross": {
         "prefix": "Cross",
         "body": [
-            "float Cross(vec2 uv, vec2 scale, float blur, vec2 offset){",
-            "\tfloat rect1 = Rectangle(uv, vec2(scale.x, scale.y), vec4(blur), offset);",
-            "\tfloat rect2 = Rectangle(uv, vec2(scale.y, scale.x), vec4(blur), offset);",
+            "float Cross(vec2 uv, vec2 scale, float blur){",
+            "\tfloat rect1 = Rectangle(uv, vec2(scale.x, scale.y), vec4(blur));",
+            "\tfloat rect2 = Rectangle(uv, vec2(scale.y, scale.x), vec4(blur));",
             "\treturn max(rect1, rect2);",
             "}"
         ],
@@ -177,8 +227,7 @@
     "Polygon": {
         "prefix": "Polygon",
         "body": [
-            "float Polygon(vec2 uv, vec2 offset, float radius, float sides, float blur){",
-            "\tuv += offset;",
+            "float Polygon(vec2 uv, float radius, float sides, float blur){",
             "\tfloat angle = atan(uv.x, uv.y);",
             "\tfloat slice = PI * 2.0 / sides;",
             "\treturn smoothstep(radius,  radius - blur, cos(floor(0.5 + angle / slice) * slice - angle) * length(uv));",
@@ -193,7 +242,7 @@
             "mat2 Scale(vec2 scale){",
             "\treturn mat2(scale.x, 0.0,",
             "\t\t\t0.0, scale.y);",
-            "}0
+            "}"
         ],
         "description": "scale"
     },
@@ -215,6 +264,31 @@
             "vec2 Tile(vec2 uv, float subdiv){",
             "\tuv *= subdiv;",
             "\treturn fract(uv);",
+            "}"
+        ],
+        "description": "Rotates the given uv space with center alignment"
+    },
+
+    "TilesBrick": {
+        "prefix": "TilesBrick",
+        "body": [
+            "vec2 TilesBrick(vec2 uv){",
+            "\tuv.x += step(1., mod(uv.y, 2.)) * 0.5;",
+            "\treturn fract(uv);",
+            "}"
+        ],
+        "description": "Rotates the given uv space with center alignment"
+    },
+
+    "TileRotatePattern": {
+        "prefix": "TileRotatePattern",
+        "body": [
+            "vec2 TileRotatePattern(vec2 uv){",
+            "\tfloat rot = step(1., mod(uv.y, 2.));",
+            "\trot += step(1., mod(uv.x, 2.));",
+            "\trot += 2. * step(1., mod(-uv.y, 2.)) * step(1., mod(uv.x, 2.));",
+            "",
+            "\treturn uv = fract(uv * Rotate2D(PI/2 * rot));",
             "}"
         ],
         "description": "Rotates the given uv space with center alignment"
@@ -343,5 +417,4 @@
         ],
         "description": "converts a from RGB to YUV color space"
     }
-
 }
